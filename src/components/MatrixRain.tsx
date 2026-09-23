@@ -1,0 +1,86 @@
+import { useEffect, useRef } from 'react';
+
+const MatrixRain = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const chars = '01{}<>/*#=+-;:.~[]AIλJAVA_C_OOP';
+    const fontSize = 14;
+
+    let columns = Math.floor(canvas.width / fontSize);
+    let drops: number[] = Array(columns).fill(1).map(() => Math.random() * -50);
+
+    const draw = () => {
+      // Fade existing frame with translucent dark overlay
+      ctx.fillStyle = 'rgba(7, 7, 7, 0.12)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.font = `${fontSize}px monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const char = chars[Math.floor(Math.random() * chars.length)];
+
+        // Lead character with bright gold glow
+        ctx.fillStyle = 'rgba(245, 215, 127, 0.45)';
+        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+        // Trail character with deep antique gold
+        if (drops[i] > 1) {
+          const trailChar = chars[Math.floor(Math.random() * chars.length)];
+          ctx.fillStyle = 'rgba(212, 175, 55, 0.15)';
+          ctx.fillText(trailChar, i * fontSize, (drops[i] - 1) * fontSize);
+        }
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.985) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    };
+
+    const handleResize = () => {
+      resize();
+      columns = Math.floor(canvas.width / fontSize);
+      drops = Array(columns).fill(1).map(() => Math.random() * -50);
+    };
+
+    window.addEventListener('resize', handleResize);
+    const interval = setInterval(draw, 50);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="pointer-events-none"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 0,
+        backgroundColor: '#070707',
+      }}
+    />
+  );
+};
+
+export default MatrixRain;

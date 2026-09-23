@@ -1,0 +1,17 @@
+{
+  "name": "Vaibhav Rao Nallani | Engineering Student (Artificial Intelligence)",
+  "short_name": "VRN",
+  "description": "Portfolio of Vaibhav Rao Nallani — Engineering Student in Artificial Intelligence at Kakatiya Institute of Technology and Science (KITS).",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#070707",
+  "background_color": "#070707",
+  "display": "standalone",
+  "start_url": "/",
+  "orientation": "portrait"
+}
